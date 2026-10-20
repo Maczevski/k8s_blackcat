@@ -1,0 +1,57 @@
+# ==============================================================================
+# DOCUMENTOS DE ESTUDO PESSOAL (NÃO VERSIONAR NA ENTREGA ACADÊMICA)
+# ==============================================================================
+GUIA_DEFESA_E_CONCEITOS.pdf
+GUIA_DEFESA_E_CONCEITOS.md
+*DEFESA*
+generate_pdf.py
+
+# ==============================================================================
+# ARTEFATOS DE COMPILAÇÃO E DEPENDÊNCIAS (JAVA / MAVEN / GRADLE)
+# ==============================================================================
+target/
+build/
+*.jar
+# Exceção caso utilize o artefato pré-compilado do backend sem diretório src/:
+!backend/blackcat.jar
+*.war
+*.ear
+*.class
+*.bak
+*.original-backup
+*.tmp
+.mvn/
+mvnw
+mvnw.cmd
+
+# ==============================================================================
+# ARTEFATOS FRONTEND (NODE / ANGULAR)
+# ==============================================================================
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==============================================================================
+# LOGS, VARIÁVEIS DE AMBIENTE E DADOS LOCAIS DE BANCO
+# ==============================================================================
+*.log
+logs/
+.env
+.env.*
+mysql/data/
+*.sql.gz
+
+# ==============================================================================
+# ARQUIVOS DE SISTEMA OPERACIONAL E IDEs
+# ==============================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

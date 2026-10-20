@@ -1,0 +1,208 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 001-create-usuario
+      author: emilly
+      changes:
+        - createTable:
+            tableName: usuario
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: login
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: senha
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: role
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: ativo
+                  type: BIT
+                  constraints:
+                    nullable: false
+
+      rollback:
+        - dropTable:
+            tableName: usuario
+
+
+  - changeSet:
+      id: 002-create-produto
+      author: emilly
+      changes:
+        - createTable:
+            tableName: produto
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: descricao
+                  type: VARCHAR(255)
+
+              - column:
+                  name: ativo
+                  type: BIT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: preco
+                  type: DOUBLE
+                  constraints:
+                    nullable: false
+
+      rollback:
+        - dropTable:
+            tableName: produto
+
+
+  - changeSet:
+      id: 003-create-venda
+      author: emilly
+      changes:
+        - createTable:
+            tableName: venda
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: total
+                  type: DOUBLE
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: data
+                  type: TIMESTAMP
+
+              - column:
+                  name: desconto
+                  type: INT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: forma_pagamento
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: usuario_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: venda
+            baseColumnNames: usuario_id
+            referencedTableName: usuario
+            referencedColumnNames: id
+            constraintName: fk_venda_usuario
+
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: venda
+            constraintName: fk_venda_usuario
+
+        - dropTable:
+            tableName: venda
+
+
+  - changeSet:
+      id: 004-create-produto-venda
+      author: emilly
+      changes:
+        - createTable:
+            tableName: produto_venda
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: quantidade
+                  type: INT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: venda_id
+                  type: BIGINT
+
+              - column:
+                  name: produto_id
+                  type: BIGINT
+
+        - addForeignKeyConstraint:
+            baseTableName: produto_venda
+            baseColumnNames: venda_id
+            referencedTableName: venda
+            referencedColumnNames: id
+            constraintName: fk_produto_venda_venda
+
+        - addForeignKeyConstraint:
+            baseTableName: produto_venda
+            baseColumnNames: produto_id
+            referencedTableName: produto
+            referencedColumnNames: id
+            constraintName: fk_produto_venda_produto
+
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: produto_venda
+            constraintName: fk_produto_venda_venda
+
+        - dropForeignKeyConstraint:
+            baseTableName: produto_venda
+            constraintName: fk_produto_venda_produto
+
+        - dropTable:
+            tableName: produto_venda

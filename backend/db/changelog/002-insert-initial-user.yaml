@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - property:
+      name: initial_admin_username
+      value: "sre_admin_tcc"
+  - property:
+      name: initial_admin_name
+      value: "Administrador Experimento SRE"
+  - property:
+      name: initial_admin_password_hash
+      value: ""
+
+  - changeSet:
+      id: 002-insert-initial-user
+      author: tcc-sre
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: 1
+                sql: "SELECT COUNT(*) FROM usuario WHERE login = '${initial_admin_username}'"
+      changes:
+        - insert:
+            tableName: usuario
+            columns:
+              - column:
+                  name: nome
+                  value: "${initial_admin_name}"
+              - column:
+                  name: login
+                  value: "${initial_admin_username}"
+              - column:
+                  name: senha
+                  value: "${initial_admin_password_hash}"
+              - column:
+                  name: role
+                  value: "GESTOR"
+              - column:
+                  name: ativo
+                  valueBoolean: true
+      rollback:
+        - delete:
+            tableName: usuario
+            where: "login = '${initial_admin_username}' AND nome = '${initial_admin_name}'"
