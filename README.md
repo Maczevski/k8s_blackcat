@@ -56,21 +56,9 @@ kubectl get nodes
 
 ---
 
-## 3. Construção das Imagens no Daemon do Minikube
+## 3. Construção e Carregamento das Imagens no Minikube
 
-Para que o Kubernetes utilize as imagens construídas localmente sem necessidade de enviá-las para um registry externo (Docker Hub / ECR), aponte o cliente Docker do seu terminal diretamente para o Docker Daemon interno do Minikube:
-
-### No Linux / macOS / Git Bash (WSL):
-```bash
-eval $(minikube docker-env)
-```
-
-### No Windows (PowerShell):
-```powershell
-& minikube -p minikube docker-env --shell powershell | Invoke-Expression
-```
-
-Em seguida, a partir da **raiz do repositório**, execute o build das imagens do **Backend** e do **Frontend**:
+A partir da **raiz do repositório**, execute o build das imagens Docker do **Backend** e do **Frontend** na sua máquina local:
 
 ```bash
 # 1. Build da imagem do Backend (Spring Boot)
@@ -80,10 +68,17 @@ docker build -t blackcat-backend:latest ./backend
 docker build -t blackcat-frontend:latest ./frontend
 ```
 
+Em seguida, carregue as imagens construídas diretamente para dentro do cluster **Minikube** (sem necessidade de enviá-las para um registry externo como Docker Hub ou ECR):
+
+```bash
+minikube image load blackcat-backend:latest
+minikube image load blackcat-frontend:latest
+```
+
 Confirme que as imagens estão disponíveis dentro do ambiente do Minikube:
 
 ```bash
-docker images | grep blackcat
+minikube image ls
 ```
 
 ---
@@ -145,6 +140,10 @@ minikube service frontend-service --url
 ```
 
 > **Nota para usuários Windows / Docker Driver:** Mantenha a janela do terminal com o comando `minikube service frontend-service` aberta enquanto utiliza a aplicação no navegador, pois o driver Docker no Windows/macOS cria um túnel local dinâmico até o container do nó Minikube.
+
+### Credenciais de Acesso Inicial (Seed do Banco)
+- **Usuário (Login):** `admin`
+- **Senha:** `admin`
 
 ---
 

@@ -1,17 +1,17 @@
 databaseChangeLog:
   - property:
       name: initial_admin_username
-      value: "sre_admin_tcc"
+      value: "admin"
   - property:
       name: initial_admin_name
-      value: "Administrador Experimento SRE"
+      value: "Admin User"
   - property:
       name: initial_admin_password_hash
-      value: ""
+      value: "$2a$10$Sy0HLv6EANMf5L7JoGfsbuPGRihWh8HWf3/ja6KfGAUtwBOqMQRPW"
 
   - changeSet:
       id: 002-insert-initial-user
-      author: tcc-sre
+      author: mensal-3
       preConditions:
         - onFail: MARK_RAN
         - not:

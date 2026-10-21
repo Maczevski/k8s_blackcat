@@ -62,11 +62,6 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: MYSQL_PASSWORD
-            - name: SPRING_LIQUIBASE_PARAMETERS_INITIAL_ADMIN_PASSWORD_HASH
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: INITIAL_ADMIN_PASSWORD_HASH
           resources:
             requests:
               cpu: "250m"
