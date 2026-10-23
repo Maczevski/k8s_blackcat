@@ -23,7 +23,8 @@ Repositório de implantação da aplicação **BlackCat** (arquitetura em três 
 ├── k8s/                      # Manifestos Kubernetes para o cluster local
 │   ├── 01-mysql.yaml         # Secret, ConfigMap, Deployment (1 réplica) e Service ClusterIP (3306)
 │   ├── 02-backend.yaml       # ConfigMap, Deployment (2 réplicas - HA) e Service ClusterIP (8080)
-│   └── 03-frontend.yaml      # Deployment (1 réplica) e Service NodePort (80 -> 30080)
+│   ├── 03-frontend.yaml      # Deployment (1 réplica) e Service (80 -> 30080)
+│   └── 04-ingress.yaml       # Ingress (Traefik) roteando /api -> backend-service e / -> frontend-service
 ├── evidencias/               # Diretório destinado às capturas de tela da execução prática
 ├── .gitignore                # Regras de exclusão de versionamento Git
 └── README.md                 # Documentação oficial de implantação e reprodução
@@ -116,37 +117,59 @@ Cria o `ConfigMap`, `Deployment` com **2 réplicas** (alta disponibilidade) e o 
 kubectl apply -f k8s/02-backend.yaml
 ```
 
-### Passo 4.3 — Camada de Apresentação e Proxy Reverso (Frontend Nginx)
-Cria o `Deployment` e o `Service` do tipo `NodePort` (`frontend-service`) para exposição externa:
+### Passo 4.3 — Camada de Apresentação (Frontend Nginx)
+Cria o `Deployment` e o `Service` (`frontend-service`):
 
 ```bash
 kubectl apply -f k8s/03-frontend.yaml
 ```
 
-### Passo 4.4 — Verificação Geral do Deploy
+### Passo 4.4 — Ingress Controller (Traefik) e Roteamento L7
+Instale o **Traefik** via Helm no cluster e aplique o manifesto de Ingress (`04-ingress.yaml`), que encaminha `/api` para o `backend-service:8080` e `/` para o `frontend-service:80`:
+
+```bash
+helm repo add traefik https://traefik.github.io/charts
+helm repo update
+helm upgrade --install traefik traefik/traefik --wait
+kubectl apply -f k8s/04-ingress.yaml
+```
+
+### Passo 4.5 — Verificação Geral do Deploy
 Acompanhe o status de todos os recursos criados no cluster:
 
 ```bash
 kubectl get pods -o wide
 kubectl get deployments
 kubectl get services
+kubectl get ingress
 ```
 
 ---
 
-## 5. Acesso à Aplicação no Navegador
+## 5. Acesso à Aplicação no Navegador (Via Hostname no Traefik Ingress)
 
-Para obter a URL externa de acesso ao `frontend-service` (exposto via `NodePort`) e abrir automaticamente a aplicação no navegador padrão, execute:
+O manifesto `k8s/04-ingress.yaml` configura o roteamento por domínio (*Host-based routing*) para **`blackcat.localhost`** (que já resolve automaticamente para `127.0.0.1` no Windows/Linux/macOS sem precisar editar o arquivo `hosts`) e para **`blackcat.local`**.
 
+### Opção A — Acesso via Hostname na Porta 80 com Traefik (Recomendado)
+Encaminhe a porta `80` local para o serviço do **Traefik**:
+
+```bash
+kubectl port-forward svc/traefik 80:80
+```
+
+Em seguida, acesse diretamente no navegador (sem precisar informar porta):
+- **URL:** [http://blackcat.localhost](http://blackcat.localhost)
+- *(Ou `http://blackcat.local`, caso adicione `127.0.0.1 blackcat.local` no arquivo `hosts` do sistema).*
+
+### Opção B — Acesso direto via NodePort do Frontend
 ```bash
 minikube service frontend-service
 ```
 
-Caso deseje apenas exibir a URL gerada no terminal (sem abrir o navegador automaticamente):
-
-```bash
-minikube service frontend-service --url
-```
+> **Por que usar o Traefik (Ingress Controller) em vez de expor serviços via NodePort?**
+> 1. **Ponto Único de Entrada (Single Entrypoint):** Em vez de abrir múltiplas portas altas (`30000–32767`) no nó para cada serviço, o Traefik centraliza todo o tráfego externo nas portas padrão HTTP/HTTPS (`80`/`443`).
+> 2. **Roteamento Inteligente na Camada 7 (HTTP/HTTPS):** Permite rotear requisições por caminho (*path-based routing*: `/api` vai direto para `backend-service:8080` e `/` vai para `frontend-service:80`) ou por domínio (*host-based routing*) diretamente na borda do cluster.
+> 3. **Segurança e Isolamento:** Elimina a necessidade de expor os Services internos como `NodePort`, permitindo que todos os microsserviços operem de forma privada (`ClusterIP`) atrás do Ingress Controller, que também centraliza TLS/SSL, Rate Limiting, CORS e observabilidade.
 
 > **Nota para usuários Windows / Docker Driver:** Mantenha a janela do terminal com o comando `minikube service frontend-service` aberta enquanto utiliza a aplicação no navegador, pois o driver Docker no Windows/macOS cria um túnel local dinâmico até o container do nó Minikube.
 
