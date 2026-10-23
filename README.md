@@ -8,8 +8,17 @@ Repositório de implantação da aplicação **BlackCat** (arquitetura em três 
 
 ```text
 .
-├── backend/                  # Aplicação Spring Boot (Java 17), Liquibase changelogs e Dockerfile
-├── frontend/                 # Aplicação Web estática servida via Nginx (Proxy Reverso) e Dockerfile
+├── backend/                  # Código-fonte do Backend (Spring Boot / Java 17)
+│   ├── src/                  # Controllers, Services, Repositories, Entities e Liquibase Changelogs
+│   ├── pom.xml               # Gerenciamento de dependências e build Maven
+│   └── Dockerfile            # Build Multi-stage (Maven JDK 17 -> Runtime JRE 17)
+├── frontend/                 # Código-fonte do Frontend (Angular 18)
+│   ├── src/                  # Componentes, Serviços, Guardas de Rota e Environments (/api)
+│   ├── public/               # Assets e imagens estáticas
+│   ├── angular.json          # Configuração de build do Angular CLI
+│   ├── package.json          # Dependências Node/Angular
+│   ├── nginx.conf            # Configuração de SPA e Proxy Reverso (/api -> backend-service:8080)
+│   └── Dockerfile            # Build Multi-stage (Node 20 Alpine -> Nginx Alpine)
 ├── mysql/                    # Configurações otimizadas do banco de dados relacional (my.cnf)
 ├── k8s/                      # Manifestos Kubernetes para o cluster local
 │   ├── 01-mysql.yaml         # Secret, ConfigMap, Deployment (1 réplica) e Service ClusterIP (3306)

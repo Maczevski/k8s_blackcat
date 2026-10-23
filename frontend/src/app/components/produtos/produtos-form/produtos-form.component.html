@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row">
+    <div class="col" style="display: flex; justify-content: center">
+      <div class="card-body">
+        <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
+          <br />
+          
+          <mdb-form-control>
+            <input
+              mdbInput
+              type="text"
+              id="nome"
+              class="form-control"
+              formControlName="nome"
+              required
+              minlength="3"
+            />
+            <label mdbLabel class="form-label" for="nome">Nome</label>
+          
+          </mdb-form-control>
+          <br />
+          <mdb-form-control>
+            <input
+              mdbInput
+              type="text"
+              id="descricao"
+              class="form-control"
+              formControlName="descricao"
+            />
+            <label mdbLabel class="form-label" for="descricao">Descrição</label>
+          </mdb-form-control>
+          <br />
+          <mdb-form-control>
+            <input
+              mdbInput
+              type="number"
+              id="preco"
+              class="form-control"
+              formControlName="preco"
+              required
+              min="0"
+            />
+            <label mdbLabel class="form-label" for="preco">Preço</label>
+          
+          </mdb-form-control>
+          <br />
+          <div class="d-flex justify-content-end">
+            <button
+              type="submit"
+              class="btn btn-success btn-rounded"
+              [disabled]="produtoForm.invalid"
+              mdbRipple
+            >
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+@import "mdb-angular-ui-kit/assets/scss/mdb.scss";
+
+.right-aligned {
+  text-align: right;
+  justify-content: right;
+}
+.center-aligned {
+  text-align: center !important; 
+  justify-content: center 
+}
+.left-aligned {
+  text-align: left;
+  justify-content: left;
+}
+.table td:first-child {
+  text-align: left;
+}
+body {
+  background-color: #d3d3da;
+}
+
+.btn-success{
+  background-color: #60ae70;
+}
+
+.table-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-radius: 5px;
+
+}
+.table th {
+  position: sticky;
+  background-color: #e98a7f;
+  color: #ffffff !important; 
+}
+
+.table-scroll-grande {
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+.table-scroll::-webkit-scrollbar {
+  width: 4px; 
+  height: 1px; 
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+
+  background-color: #e98a7f; 
+
+  border-radius: 2px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+.table-scroll-grande::-webkit-scrollbar {
+  width: 4px; /* Reduz a largura da barra vertical */
+  height: 1px; /* Reduz a altura da barra horizontal */
+}
+
+.table-scroll-grande::-webkit-scrollbar-thumb {
+  background-color: #e98a7f; 
+  border-radius: 2px;
+}
+
+.table-scroll-grande::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Estilo para cabeçalhos da tabela */
+.table th {
+  position: sticky; /* Permite que o cabeçalho seja fixo */
+  top: 0; /* Fixa o cabeçalho no topo do contêiner de rolagem */
+
+  padding: 10px;
+}
+
+/* Estilo para células da tabela */
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+  color: #000000;
+}
+
+.table th:first-child {
+  border-top-left-radius: 10px; /* Arredonda o canto superior esquerdo */
+}
+
+.table th:last-child {
+  border-top-right-radius: 10px; /* Arredonda o canto superior direito */
+}
+
+.no-spin-input::-webkit-outer-spin-button,
+.no-spin-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.swal2-container {
+  z-index: 10000;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .status-card {
+    margin-bottom: 10px;
+  }
+  .table {
+    font-size: 14px;
+  }
+
+  .table td {
+    padding: 12px;
+  }
+}
+
+

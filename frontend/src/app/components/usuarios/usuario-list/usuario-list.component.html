@@ -1,0 +1,146 @@
+<div class="container mt-4">
+  <div class="card">
+    @if (!modoAddUser) {
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <h2 class="mb-0 fw-bold">
+          <i class="fas fa-users me-1 icon-color"></i>
+          Usuários</h2>
+        <div class="btn-group ms-3">
+          <input
+            mdbRadio
+            type="radio"
+            class="btn-check"
+            name="findAll"
+            id="findEnabled"
+            autocomplete="off"
+            [checked]="ativo === true"
+            (change)="findAll(true)"
+          />
+          <label class="btn btn-secondary btn-sm" for="findEnabled">ATIVOS</label>
+          <input
+            mdbRadio
+            type="radio"
+            class="btn-check"
+            name="findAll"
+            id="findDisabled"
+            autocomplete="off"
+            [checked]="ativo === false"
+            (change)="findAll(false)"
+          />
+          <label class="btn btn-secondary btn-sm" for="findDisabled">INATIVOS</label>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-success mt-2"
+        mdbRipple
+        (click)="new()"
+      >
+      Novo
+      <i class="fas fa-user-plus ms-1"></i>
+      </button>
+    </div>
+    }
+    <div
+      class="card-body d-flex flex-column"
+    >
+      <div class="table-responsive table-scroll" >
+        <table class="table table-hover table-striped ">
+          <thead class="table-light">
+            <tr>
+              <th>Nome</th>
+              <th>Login</th>
+              <th>Função</th>
+              @if (modoAddUser) {
+              <th class="text-center fw-bold">Add</th>
+              } @else {
+              <th class="text-center fw-bold">Ações</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (usuario of lista; track $index) {
+            <tr>
+              <td>{{ usuario.nome }}</td>
+              <td>{{ usuario.login }}</td>
+              <td>{{ usuario.role }}</td>
+
+              <!-- Lógica para exibir botões -->
+              <td
+                class="text-center d-flex flex-wrap justify-content-center gap-2"
+              >
+                @if (modoAddUser) {
+                <!-- Modo adicionar usuário -->
+                <button
+                  class="btn btn-primary"
+                  (click)="retornarUsuario(usuario)"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+                } @else {
+                <!-- Modo listar ativos ou inativos -->
+                @if (usuario.ativo === true) {
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary"
+                  mdbRipple
+                  (click)="edit(usuario)"
+                >
+                  <i class="fas fa-pen-to-square"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  mdbRipple
+                  (click)="desativarUsuario(usuario)"
+                >
+                  <i class="fas fa-ban"></i>
+                </button>
+                } @else {
+                <button
+                  type="button"
+                  class="btn btn-sm btn-success"
+                  mdbRipple
+                  (click)="ativarUsuario(usuario)"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+                } }
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+        
+        @if (lista.length === 0) {
+          <div
+            class="d-flex flex-column  center-aligned mt-5"
+          >
+            <h4>Nenhum Usuário encontrado...</h4>
+          </div>
+        }
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalUsuarioForm>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">Cadastrar Usuário</h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-usuario-form
+      [usuario]="usuarioEdit"
+      (retorno)="retornoForm()"
+    ></app-usuario-form>
+  </div>
+</ng-template>

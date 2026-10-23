@@ -1,0 +1,71 @@
+.navbar {
+  background-color: #2F3855;
+  position: top; 
+  top: 0;
+  color: #ffffff; 
+}
+
+
+.body-content {
+  padding-top: 70px; 
+}
+
+.navbar .nav-link {
+  color: #ffffff; 
+}
+
+.navbar .nav-link:hover {
+  color: #84AADC; 
+  border-radius: 0%;
+}
+
+.navbar .btn-sair {
+  color: white; 
+  border: none;
+  padding: 10px 15px;
+  border-radius: 25px;
+  cursor: pointer; 
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar .btn-sair:hover {
+  background-color: 30DEAC;
+  color: #000000;
+}
+
+.navbar .sair-link {
+  color: #c94545;
+  cursor: pointer;
+}
+
+.navbar-brand {
+  color: #ffffff; 
+  font-weight: bold;
+}
+
+.navbar-toggler {
+  background-color: #84AADC;
+}
+
+.navbar-nav.ms-auto .nav-item .nav-link {
+  color: #ffffff; 
+}
+
+.navbar-nav.ms-auto .nav-item .nav-link:hover {
+  color: #EC4A5C; 
+}
+@media screen and (max-width: 800px) {
+  .buttons-td {
+    flex-direction: column;
+  }
+
+  .btn-edit, .btn-disable {
+    margin-bottom: 10px;
+  }
+}
+
+.active-link {
+  color: #E98A7F !important;
+  font-weight: bold;
+}

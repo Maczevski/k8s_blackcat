@@ -1,0 +1,40 @@
+<div
+  class="invalid-container d-flex flex-column flex-md-row align-items-center justify-content-center vh-100"
+>
+  <!-- Seção da Imagem -->
+  <div class="image-section d-flex align-items-end flex-grow-1">
+    <img src="imagens/cat1.png" alt="lostcat" class="cat-image w-100" />
+  </div>
+
+  <!-- Seção de Botões e Texto -->
+  <div
+    class="btn-section text-center d-flex flex-column justify-content-center align-items-start px-4"
+  >
+    <h5 class="fw-bold mb-3">
+      <i class="fas fa-lg fa-shield-cat"></i>
+      403 - Forbidden.
+       Acesso Negado!
+    </h5>
+    <h6 class="mb-2">Você não tem permissão para acessar esta página.</h6>
+    <p class="mb-4">Retorne à dashboard ou entre com outro usuário.<br /></p>
+
+    <div class="btn-container">
+      <button
+        type="button"
+        class="btn btn-light border border-dark me-2"
+        mdbRipple
+        (click)="confirmLogout($event)"
+      >
+        Sair
+      </button>
+      <button
+        type="button"
+        class="btn btn-dark"
+        mdbRipple
+        (click)="router.navigate(['/blackcat/funcionario'])"
+      >
+        Início
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+target/
+*.jar
+*.war
+*.class
+.mvn/
+mvnw
+mvnw.cmd
+.git/
+.gitignore
+.settings/
+.classpath
+.project

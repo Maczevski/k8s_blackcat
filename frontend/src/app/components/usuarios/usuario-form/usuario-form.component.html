@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="col d-flex center-aligned">
+    <div class="card-body">
+      @if (loginService.getUsuarioLogado().id !== usuario.id) {
+
+        <div class="center-aligned mb-3">
+          <label for="role" text-sm>Função:</label>
+          <div class="d-flex center-aligned">
+            <div class="btn-group">
+              <input mdbRadio type="radio" class="btn-check" name="role" id="funcionario" autocomplete="off"
+                [(ngModel)]="usuario.role" [value]="'FUNCIONARIO'" />
+              <label class="btn btn-secondary" for="funcionario">FUNCIONÁRIO</label>
+              <input mdbRadio type="radio" class="btn-check" name="role" id="gestor" autocomplete="off"
+                [(ngModel)]="usuario.role" [value]="'GESTOR'" />
+              <label class="btn btn-secondary" for="gestor">GESTOR</label>
+            </div>
+          </div>
+        </div>
+      }
+
+      <mdb-form-control>
+        <input mdbInput type="text" id="nome" class="form-control" [(ngModel)]="usuario.nome" required />
+        <label mdbLabel class="form-label" for="nome">Nome</label>
+      </mdb-form-control>
+
+      <br />
+      <mdb-form-control>
+        <input mdbInput type="text" id="login" class="form-control" [(ngModel)]="usuario.login" required minlength="3"
+          maxlength="20" />
+        <label mdbLabel class="form-label" for="login">Login (3-20 caracteres)</label>
+      </mdb-form-control>
+
+      <br />
+      <mdb-form-control>
+        <input mdbInput type="password" id="senha" class="form-control" [(ngModel)]="usuario.senha" required
+          minlength="8" />
+        <label mdbLabel class="form-label" for="senha">Senha (min 8 caracteres)</label>
+      </mdb-form-control>
+
+      <div class="form-group">
+        <div class="d-flex flex-column">
+          <br />
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-success" mbdRipple (click)="save()">
+              Salvar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

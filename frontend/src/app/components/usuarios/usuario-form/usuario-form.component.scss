@@ -1,0 +1,8 @@
+
+  .btn-check:checked + .btn-secondary {
+    background-color: #84aadc;
+    border-color: #67b0ff;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+  }

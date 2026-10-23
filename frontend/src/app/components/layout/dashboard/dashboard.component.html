@@ -1,0 +1,181 @@
+<div class="container">
+  <div class="dashboard">
+    <!-- Seção de Boas-Vindas -->
+    <div class="welcome-section">
+      <img
+        src="imagens\image-removebg-preview (73).png"
+        alt="Mascote"
+        class="mascot-image"
+      />
+      <h1>Bem-vindo!</h1>
+      <div class="btn-container">
+        <!-- Novo contêiner flexível -->
+        <a href="blackcat/venda" class="btn">Realizar Vendas</a>
+      </div>
+    </div>
+   
+
+    <!-- Seção de Histórico -->
+    <div class="historico-section">
+      <div class="historico-header">
+        <h3>
+          <i class="fas fa-shopping-cart icon-color"></i> Histórico de Venda
+        </h3>
+        <div class="input-group-container">
+          <div class="input-group rounded">
+            <input
+            type="search"
+            class="form-control search-bar rounded"
+            placeholder="Buscar por Funcionário"
+            [(ngModel)]="usuarioNome"
+            (input)="buscarNaTabela()"
+          />
+          
+            <span class="input-group-text border-0" id="search-addon">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </div>
+        
+
+      </div>
+      <div class="table-scroll">
+        <!-- Usando a classe de rolagem -->
+        <table class="table">
+          <!-- Usando a classe de tabela -->
+          <thead>
+            <tr>
+              <th scope="col">Data</th>
+              <th scope="col">Total</th>
+              <th scope="col">Forma de Pagamento</th>
+              <th scope="col">Usuário</th>
+              <th scope="col">Detalhes</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (venda of filteredVendas; track $index) {
+              <tr>
+                <td>{{ venda.data | date : "dd/MM/yy" }}</td>
+                <td>{{ venda.total | currency : "BRL" }}</td>
+                <td>{{ venda.formaPagamento }}</td>
+                <td>{{ venda.usuario.nome }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-md btn-rounded mt-2"
+                    mdbRipple
+                    (click)="openModal(venda)"
+                  >
+                    +
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+          
+        </table>
+      </div>
+    </div>
+
+    <!-- Seção de Painéis de Vendas -->
+    <div class="sales-panels">
+      <div class="card monthly-sales">
+        <h5><i class="fas fa-calendar-alt icon-color"></i> Vendas Mensais</h5>
+        <div class="input-group">
+          <div>
+            <input
+              type="number"
+              id="mes"
+              [(ngModel)]="mes"
+              (change)="getVendasMensais()"
+              min="1"
+              max="12"
+              class="input-small no-spin-input"
+            />
+          </div>
+          <div>
+            <input
+              type="number"
+              id="ano"
+              [(ngModel)]="anoMensal"
+              (change)="getVendasMensais()"
+              class="input-small no-spin-input"
+            />
+          </div>
+        </div>
+        <p>Total: {{ vendasPorMes | currency : "BRL" }}</p>
+      </div>
+
+      <!-- Vendas Anuais -->
+      <div class="card annual-sales-card">
+        <h5><i class="fas fa-calendar-alt icon-color"></i> Vendas Anuais</h5>
+        <input
+          type="number"
+          [(ngModel)]="anoAnual"
+          (change)="getVendasAnuais()"
+          class="input-small no-spin-input"
+        />
+        <p>Total: {{ vendasAnuais | currency : "BRL" }}</p>
+      </div>
+
+      <!-- Vendas Semanais -->
+      <div class="card weekly-sales">
+        <h5>
+          <i class="fas fa-money-bill-wave icon-color"></i> Vendas Semanais
+        </h5>
+        <p>Total: {{ vendasSemanais | currency : "BRL" }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalVenda>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">Detalhes da Venda</h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Fechar"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="sale-details">
+      <p class="sale-date">
+        <strong>Data:</strong> {{ selectVenda?.data | date }}
+      </p>
+      <p class="sale-user">
+        <strong>Vendido por:</strong> {{ selectVenda?.usuario?.nome }}
+      </p>
+      <p class="sale-payment">
+        <strong>Forma de Pagamento:</strong> {{ selectVenda?.formaPagamento }}
+      </p>
+      <p class="sale-payment">
+        <strong>Desconto:</strong> {{ selectVenda?.desconto }}
+      </p>
+      <p class="sale-total">
+        <strong>Total:</strong> {{ selectVenda?.total | currency : "BRL" }}
+      </p>
+
+      <h6>Produtos:</h6>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Quantidade</th>
+            <th>Preço</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (produto of selectVenda?.produtosVenda; track produto.id) {
+          <tr>
+            <td>{{ produto.produto.nome }}</td>
+            <td>{{ produto.quantidade }}</td>
+            <td>{{ produto.produto.preco | currency : "BRL" }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-template>

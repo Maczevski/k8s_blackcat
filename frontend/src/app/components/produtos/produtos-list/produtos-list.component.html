@@ -1,0 +1,97 @@
+<div class="container mt-4">
+  <div class="card">
+    <!-- Filtro de produtos ativos/inativos -->
+    @if (!modoAddProduct) {
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <i class="fas fa-tags fa-2x me-3 ms-1 icon-color"></i>
+        <h2 class="mb-0 fw-bold">Produtos</h2>
+        <div class="btn-group ms-3">
+          <input
+            mdbRadio
+            type="radio"
+            class="btn-check"
+            name="filterStatus"
+            id="findEnabled"
+            autocomplete="off"
+            [checked]="ativo === true"
+            (change)="findAll(true)"
+          />
+          <label class="btn btn-secondary btn-sm" for="findEnabled">ATIVOS</label>
+          <input
+            mdbRadio
+            type="radio"
+            class="btn-check"
+            name="filterStatus"
+            id="findDisabled"
+            autocomplete="off"
+            [checked]="ativo === false"
+            (change)="findAll(false)"
+          />
+          <label class="btn btn-secondary btn-sm" for="findDisabled">INATIVOS</label>
+        </div>
+      </div>
+      <button type="button" class="btn btn-success btn-sm " mdbRipple (click)="new()">
+        Novo
+        <i class="fas fas fa-tag ms-1"></i>
+      </button>
+    </div>
+    }
+    <div class="card-body d-flex card-body d-flex flex-column">
+      <div class="table-responsive table-scroll">
+        <table class="table table-hover table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th class="text-center fw-bold">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (produto of lista; track $index) {
+            <tr>
+              <td>{{ produto.nome }}</td>
+              <td>{{ produto.descricao }}</td>
+              <td>R$ {{ produto.preco.toFixed(2) }}</td>
+              <td class="text-center">
+                @if (modoAddProduct) {
+                <button class="btn btn-sm btn-primary" (click)="retornarProduto(produto)">
+                  <i class="fas fa-plus"></i>
+                </button>
+                } @else {
+                @if (produto.ativo) {
+                <button type="button" class="btn btn-sm btn-primary  me-2" mdbRipple (click)="edit(produto)">
+                  <i class="fas fa-pen-to-square"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger" mdbRipple (click)="desativarProduto(produto)">
+                  <i class="fas fa-ban"></i>
+                </button>
+                } @else {
+                <button type="button" class="btn btn-sm btn-success " mdbRipple (click)="ativarProduto(produto)">
+                  <i class="fas fa-plus"></i>
+                </button>
+                } }
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="4" class="text-center">Nenhum Produto encontrado.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalProdutoDetalhe>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Cadastro de Produto</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.close()"></button>
+  </div>
+  <div class="modal-body">
+    <app-produto-form [produto]="produtoEdit" (retorno)="retornoDetalhe()"></app-produto-form>
+  </div>
+</ng-template>

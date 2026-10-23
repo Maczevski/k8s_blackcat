@@ -10,26 +10,30 @@ generate_pdf.py
 # ARTEFATOS DE COMPILAÇÃO E DEPENDÊNCIAS (JAVA / MAVEN / GRADLE)
 # ==============================================================================
 target/
+**/target/
 build/
 *.jar
-# Exceção caso utilize o artefato pré-compilado do backend sem diretório src/:
-!backend/blackcat.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
 *.war
 *.ear
 *.class
 *.bak
 *.original-backup
 *.tmp
-.mvn/
-mvnw
-mvnw.cmd
+.settings/
+.classpath
+.project
+.factorypath
 
 # ==============================================================================
 # ARTEFATOS FRONTEND (NODE / ANGULAR)
 # ==============================================================================
 node_modules/
+**/node_modules/
 dist/
+**/dist/
 .angular/
+**/.angular/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

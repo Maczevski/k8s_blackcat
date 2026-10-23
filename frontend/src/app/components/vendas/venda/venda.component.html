@@ -1,0 +1,170 @@
+<div class="container container-venda">
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card venda-card">
+        <div class="card-body">
+          <!-- Inputs Container -->
+          <div class="inputs-container d-flex justify-content-between">
+            <div class="d-flex">
+              <i class="fas fa-money-bill-wave fa-2x me-3 ms-3 icon-color"></i>
+              <h2 class="mb-0 fw-bold me-4">Venda</h2>
+            </div>
+            <div class="input-container">
+              <div class="input-group search-container flex-grow">
+                <input [(ngModel)]="nomeSearch" (keyup)="onSearch()" mdbInput type="text" name="product-search"
+                  #searchInput class="form-control search-field" placeholder="Adicionar produto" />
+                <button type="button" class="btn btn-primary btn-search me-3" data-mdb-ripple-init
+                  (click)="adicionarProduto()">
+                  <i class="fas fa-cart-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result Container -->
+          <div class="result-container">
+            @if(showResult){
+            <div class="result-list">
+              <div class="right-aligned result-header">
+                <button (click)="closeList()" class="btn-close" aria-label="Fechar"></button>
+              </div>
+              <app-produtos-list [modoAddProduct]="true" (retorno)="addProduct($event)"
+                [nomePesquisa]="nomeSearch"></app-produtos-list>
+            </div>
+            }
+          </div>
+
+          <!-- Table Section -->
+          <div class="container table-container table-scroll-grande table-responsive">
+            <table class="table table-hover table-produtos">
+              <thead class="table-striped">
+                <tr>
+                  <th>Produto</th>
+                  <th class="center-aligned">Quantidade</th>
+                  <th class="center-aligned">Valor Unitário</th>
+                  <th>Total</th>
+                  <th>Remover</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (prodVenda of venda.produtosVenda; track $index) {
+                <tr>
+                  <td>{{ prodVenda.produto.nome }}</td>
+                  <td class="qnt-td align-middle">
+                    <div class="qnt-td d-flex align-items-center justify-content-center">
+                      <button class="btn btn-primary" (click)="subtrairQuantidade(prodVenda)">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <input (keyup)="calcularTotal()" [(ngModel)]="prodVenda.quantidade" type="number" min="0"
+                        class="form-control number-field no-spin-input custom-input-width" />
+                      <button class="btn btn-primary" (click)="addQuantidade(prodVenda)">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="center-aligned">
+                    R$ {{ prodVenda.produto.preco.toFixed(2) }}
+                  </td>
+                  <td class="total-td">
+                    R$
+                    {{
+                    (prodVenda.produto.preco * prodVenda.quantidade).toFixed(
+                    2
+                    )
+                    }}
+                  </td>
+                  <td>
+                    <button class="btn btn-danger" (click)="removerProdVenda(prodVenda)">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+            @if (venda.produtosVenda.length === 0) {
+            <p class="center-aligned text">Nenhum produto presente na venda</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Section -->
+      <div class="container center-aligned">
+        <div class="row cards-container">
+          <!-- Forma de Pagamento -->
+          <div class="col-12 col-md-6 col-lg-3 small-card-column">
+            <div class="dropdown-container">
+              <div mdbDropdown class="dropdown">
+                <button [ngClass]="
+                    venda.formaPagamento
+                      ? 'btn-dropdown-selected'
+                      : 'btn-dropdown'
+                  " class="btn btn-forma-pagamento" type="button" id="dropdownMenuButton" aria-expanded="false"
+                  mdbDropdownToggle>
+                  {{ venda.formaPagamento || "Forma de Pagamento" }}
+                  <i class="fas fa-money-bills ms-2"></i>
+                </button>
+                <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <li>
+                    <button type="button" class="dropdown-item" (click)="setFormaPagamento('Cartão de Crédito')">
+                      Cartão de Crédito
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="dropdown-item" (click)="setFormaPagamento('Cartão de Débito')">Cartão de Débito</button>
+                  </li>
+                  <li>
+                    <button type="button" class="dropdown-item" (click)="setFormaPagamento('Pix')">Pix</button>
+                  </li>
+                  <li>
+                    <button type="button" class="dropdown-item" (click)="setFormaPagamento('Dinheiro')">Dinheiro</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desconto -->
+          <div class="col-12 col-md-6 col-lg-4 small-card-column">
+            <div class="card small-card">
+              <div class="card-body">
+                <h5>Desconto (%):</h5>
+                <div class="discount-container">
+                  <button class="btn btn-primary" (click)="subtrairDesconto()">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input [(ngModel)]="venda.desconto" (keyup)="calcularTotal()" min="0" max="100" type="number"
+                    class="form-control no-spin-input number-field" />
+                  <button class="btn btn-primary" (click)="addDesconto()">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="col-12 col-md-6 col-lg-2 small-card-column">
+            <div class="card small-card">
+              <div class="card-body">
+                <h4>Total:</h4>
+                <p class="text">{{ totalVendaText }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Finalizar Venda -->
+          <div class="col-12 col-md-6 col-lg-3 small-card-column">
+            <div class="btn-venda-container">
+              <button [disabled]="!vendaValida" (click)="save()" class="btn btn-finalizar-venda">
+                <i class="fas fa-cart-shopping"></i> Finalizar Venda
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

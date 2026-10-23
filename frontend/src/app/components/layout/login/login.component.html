@@ -1,0 +1,39 @@
+<div class="login-container">
+  <div class="image-section">
+    <div>
+      <img
+        src="imagens/eeab009c82c074366e54e4e0622e736c.gif"
+        alt="Ilustração de login"
+      />
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h6>Login</h6>
+    <p>Seja bem-vindo de volta ao BlackCat, realize o login para entrar.</p>
+
+    <!-- Usuário -->
+    <div class="input-container">
+      <i class="fas fa-user"></i>
+      <input
+        type="text"
+        placeholder="Usuário"
+        [(ngModel)]="login.username"
+        (keydown.enter)="focusNext()"
+      />
+    </div>
+
+    <div class="input-container">
+      <input
+        type="password"
+        placeholder="Senha"
+        [(ngModel)]="login.password"
+        #passwordField
+        (keydown.enter)="logar()"
+      />
+      <i class="fas fa-lock"></i>
+    </div>
+
+    <button type="button" class="mt-4" (click)="logar()">LOGIN</button>
+  </div>
+</div>
